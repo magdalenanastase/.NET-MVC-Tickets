@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -12,15 +13,15 @@ namespace Tickets.Data
     {
         public static void Seed(IApplicationBuilder applicationBuilder)
         {
-            using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
-            {
-                var context = serviceScope.ServiceProvider.GetService<AppDbContext>();
-                context.Database.EnsureCreated();
+            using var serviceScope = applicationBuilder.ApplicationServices.CreateScope();
+            var context = serviceScope.ServiceProvider.GetService<AppDbContext>();
+            //context.Database.EnsureCreated();
+            context.Database.Migrate();
 
-                //Cinema
-                if (!context.Cinemas.Any())
-                {
-                    context.Cinemas.AddRange(new List<Cinema>()
+            //Cinema
+            if (!context.Cinemas.Any())
+            {
+                context.Cinemas.AddRange(new List<Cinema>()
                     {
                         new Cinema()
                         {
@@ -53,12 +54,12 @@ namespace Tickets.Data
                             Description = "This is the description of the first cinema"
                         },
                     });
-                    context.SaveChanges();
-                }
-                //Actors
-                if (!context.Actors.Any())
-                {
-                    context.Actors.AddRange(new List<Actor>()
+                context.SaveChanges();
+            }
+            //Actors
+            if (!context.Actors.Any())
+            {
+                context.Actors.AddRange(new List<Actor>()
                     {
                         new Actor()
                         {
@@ -92,12 +93,12 @@ namespace Tickets.Data
                             ProfilePictureURL = "http://dotnethow.net/images/actors/actor-5.jpeg"
                         }
                     });
-                    context.SaveChanges();
-                }
-                //Producers
-                if (!context.Producers.Any())
-                {
-                    context.Producers.AddRange(new List<Producer>()
+                context.SaveChanges();
+            }
+            //Producers
+            if (!context.Producers.Any())
+            {
+                context.Producers.AddRange(new List<Producer>()
                     {
                         new Producer()
                         {
@@ -131,12 +132,12 @@ namespace Tickets.Data
                             ProfilePictureURL = "http://dotnethow.net/images/producers/producer-5.jpeg"
                         }
                     });
-                    context.SaveChanges();
-                }
-                //Movies
-                if (!context.Movies.Any())
-                {
-                    context.Movies.AddRange(new List<Movie>()
+                context.SaveChanges();
+            }
+            //Movies
+            if (!context.Movies.Any())
+            {
+                context.Movies.AddRange(new List<Movie>()
                     {
                         new Movie()
                         {
@@ -211,12 +212,12 @@ namespace Tickets.Data
                             MovieCategory = MovieCategory.Drama
                         }
                     });
-                    context.SaveChanges();
-                }
-                //Actors & Movies
-                if (!context.Actors_Movies.Any())
-                {
-                    context.Actors_Movies.AddRange(new List<Actor_Movie>()
+                context.SaveChanges();
+            }
+            //Actors & Movies
+            if (!context.Actors_Movies.Any())
+            {
+                context.Actors_Movies.AddRange(new List<Actor_Movie>()
                     {
                         new Actor_Movie()
                         {
@@ -312,8 +313,7 @@ namespace Tickets.Data
                             MovieId = 6
                         },
                     });
-                    context.SaveChanges();
-                }
+                context.SaveChanges();
             }
         }
     }
