@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -10,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Tickets.Data;
+using Tickets.Data.Cart;
 using Tickets.Data.Services;
 
 namespace Tickets
@@ -34,7 +36,16 @@ namespace Tickets
             //services configuration
             //services.AddScoped<IActorsService, ActorsService>();
             services.AddScoped<IActorsService, ActorsServices>();
+            services.AddScoped<IProducersService, ProducersService>();
+            services.AddScoped<IMoviesService, MoviesService>();
+            services.AddScoped<ICinemasService, CinemasService>();
+            services.AddScoped<IOrdersService, OrdersService>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddScoped(sc => ShoppingCart.GetShoppingCart(sc));
+            services.AddSession();
             services.AddControllersWithViews();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -54,6 +65,7 @@ namespace Tickets
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseSession();
 
             app.UseAuthorization();
 

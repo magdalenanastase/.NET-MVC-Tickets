@@ -14,9 +14,12 @@ namespace Tickets.Data
         public static void Seed(IApplicationBuilder applicationBuilder)
         {
             using var serviceScope = applicationBuilder.ApplicationServices.CreateScope();
+           
             var context = serviceScope.ServiceProvider.GetService<AppDbContext>();
+
             //context.Database.EnsureCreated();
-            context.Database.Migrate();
+            context.Database.EnsureCreated();
+            //context.Database.Migrate();
 
             //Cinema
             if (!context.Cinemas.Any())
@@ -56,6 +59,7 @@ namespace Tickets.Data
                     });
                 context.SaveChanges();
             }
+
             //Actors
             if (!context.Actors.Any())
             {
